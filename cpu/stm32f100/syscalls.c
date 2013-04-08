@@ -64,17 +64,3 @@ int _write(int file, char *ptr, int len) {
 # define _LLIO_STDOUT ((int) stdout)
 # define _LLIO_STDERR ((int) stderr)
 # define _LLIO_ERROR  (-1)
-
-
-#undef putchar
-
-int __attribute__(( weak )) putchar(int c)
-{
-  uart3_writeb(c);
-  return c;
-}
-
-void __io_putchar(char c)
-{
-  putchar(c);
-}

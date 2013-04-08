@@ -85,10 +85,10 @@ void USART3_IRQHandler(void)
   	c=USART_ReceiveData(USART3);
     if(uart3_input_handler != NULL) 
 	{
-		if(c == 0x0D)
-		{
-			c = 0x0A;
-		}
+//		if(c == 0x0D)
+//		{
+//			c = 0x0A;
+//		}
 		uart3_input_handler(c);
     }
 }

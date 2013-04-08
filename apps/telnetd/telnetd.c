@@ -44,9 +44,9 @@
 #define ISO_nl       0x0a
 #define ISO_cr       0x0d
 
+// FIXME: multiple AUTOSTART_PROCESSED macro call problem
 PROCESS(telnetd_process, "Telnet server");
-
-AUTOSTART_PROCESSES(&telnetd_process);
+//AUTOSTART_PROCESSES(&telnetd_process);
 
 #ifndef TELNETD_CONF_LINELEN
 #define TELNETD_CONF_LINELEN 80

@@ -1,7 +1,7 @@
 CONTIKI_PROJECT = stm32vldiscovery-tests
 all: $(CONTIKI_PROJECT)
 
-APPS = serial-shell
+APPS = telnetd program-handler shell
 
 CONTIKI = ../..
 include $(CONTIKI)/Makefile.include
