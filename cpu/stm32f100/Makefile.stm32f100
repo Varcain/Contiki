@@ -51,7 +51,7 @@ CONTIKI_CPU_DIRS = . \
 				   ./Libraries/STM32F10x_StdPeriph_Driver/src \
 
 CPU_INIT_S = startup_stm32f10x_md_vl.S
-CMSIS_SOURCEFILES = system_stm32f10x.c core_cm3.c 
+CMSIS_SOURCEFILES = system_stm32f10x.c
 DRIVER_SOURCEFILES = misc.c stm32f10x_rcc.c stm32f10x_gpio.c stm32f10x_tim.c stm32f10x_usart.c
 CONTIKI_MACH = clock.c rtimer-arch.c leds-arch.c uart3.c uip_arch.c slip_uart3.c
 CONTIKI_DEV = leds.c slip.c
@@ -76,3 +76,6 @@ $(OBJECTDIR)/%.o: %.S
 	@$(OBJDUMP) -h -S $@ > $(TARGET).lst
 	$(OBJCOPY) $@ -O ihex $(TARGET).ihex
 	$(OBJCOPY) -O binary $@ $(TARGET).bin
+	
+$(CONTIKI_CPU)/e_stdio/e_stdio_intonly_thumb2.a:
+	make TC=$(TC) -C $(CONTIKI_CPU)/e_stdio

@@ -1,6 +1,4 @@
 ###################################################
-# Set toolchain
-TC = /media/data/x-tools/cortex-m3/bin/arm-cortex_m3-eabi
 
 # Set Tools
 CC		= $(TC)-gcc
