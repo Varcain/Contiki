@@ -9,3 +9,5 @@ Makefile.target
 doc/html
 patches-*
 tools/tunslip6
+*.lst
+stm32*.stm32*
