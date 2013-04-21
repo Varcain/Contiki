@@ -7,6 +7,9 @@ NETMASKNO=255.255.0.0
 BAUDRATE=115200
 SLIP_DEV=/dev/ttyUSB0
 
+killall -9 slattach
+rmmod slip
+modprobe slip
 #setserial $SLIP_DEV low_latency
 slattach -mdv -s $BAUDRATE -p slip $SLIP_DEV &
 sleep 1 # allow time for slip device to appear

@@ -81,14 +81,26 @@ uart3_init(unsigned long ubr)
 void USART3_IRQHandler(void)
 {
 	uint8_t c;
-  	USART_ClearITPendingBit(USART3,USART_IT_RXNE);
-  	c=USART_ReceiveData(USART3);
-    if(uart3_input_handler != NULL) 
+
+	if(USART_GetITStatus(USART3, USART_IT_RXNE))
 	{
-//		if(c == 0x0D)
-//		{
-//			c = 0x0A;
-//		}
-		uart3_input_handler(c);
-    }
+		GPIO_SetBits(GPIOC, GPIO_Pin_9);
+		USART_ClearITPendingBit(USART3,USART_IT_RXNE);
+		c=USART_ReceiveData(USART3);
+		if(uart3_input_handler != NULL)
+		{
+			//		if(c == 0x0D)
+			//		{
+			//			c = 0x0A;
+			//		}
+			uart3_input_handler(c);
+		}
+		GPIO_ResetBits(GPIOC, GPIO_Pin_9);
+	}
+	if(USART_GetITStatus(USART3, USART_IT_ORE|USART_IT_IDLE))
+	{
+		GPIO_SetBits(GPIOC, GPIO_Pin_8);
+		USART_ClearITPendingBit(USART3,USART_IT_ORE|USART_IT_IDLE);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_8);
+	}
 }

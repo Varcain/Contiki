@@ -9,9 +9,6 @@
 #define CC_CONF_VA_ARGS                1
 #define CC_NO_VA_ARGS					0
 
-#define CCIF
-#define CLIF
-
 #define WITH_LOGGING 1
 #define WITH_CLIENT 1
 #define WITH_DNS 1
@@ -36,19 +33,9 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_BYTE_ORDER      UIP_LITTLE_ENDIAN
 #define UIP_CONF_TCP      		  1
 #define UIP_CONF_TCP_SPLIT       1
-#define UIP_CONF_LOGGING         0
+#define UIP_CONF_LOGGING         1
 #define UIP_CONF_UDP_CHECKSUMS   1
-
-#if UIP_CONF_IPV6
-#define UIP_CONF_IPV6_CHECKS     1
-#define UIP_CONF_IPV6_QUEUE_PKT  1
-#define UIP_CONF_IPV6_REASSEMBLY 0
-#define UIP_CONF_NETIF_MAX_ADDRESSES  3
-#define UIP_CONF_ND6_MAX_PREFIXES     3
-#define UIP_CONF_ND6_MAX_NEIGHBORS    4
-#define UIP_CONF_ND6_MAX_DEFROUTERS   2
-#define UIP_CONF_ICMP6           1
-#endif /* UIP_CONF_ICMP6 */
+#define UIP_CONF_LLH_LEN		  0
 
 typedef unsigned long clock_time_t;
 
@@ -58,5 +45,8 @@ typedef unsigned long clock_time_t;
 
 /* Not part of C99 but actually present */
 int strcasecmp(const char*, const char*);
+
+#define CCIF
+#define CLIF
 
 #endif /* __CONTIKI_CONF_H__ */
