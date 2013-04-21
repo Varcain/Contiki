@@ -6,8 +6,6 @@ CUSTOM_RULE_C_TO_O=yes
 CUSTOM_RULE_C_TO_CO=yes
 CUSTOM_RULE_LINK=yes
 
-#OBJECTDIR = ./obj_stm32f100
-
 ###################################################
 # Set toolchain
 TC = /media/data/x-tools/cortex-m3/bin/arm-cortex_m3-eabi

@@ -1,0 +1,82 @@
+###################################################
+# Set options
+CUSTOM_RULE_C_TO_OBJECTDIR_O=yes
+CUSTOM_RULE_S_TO_OBJECTDIR_O=yes
+CUSTOM_RULE_C_TO_O=yes
+CUSTOM_RULE_C_TO_CO=yes
+CUSTOM_RULE_LINK=yes
+
+###################################################
+# Set toolchain
+TC = /media/data/x-tools/cortex-m4/bin/arm-cortex_m4-eabi
+
+# Set Tools
+CC			= $(TC)-gcc
+LD			= $(TC)-ld
+AR			= $(TC)-ar
+OBJCOPY		= $(TC)-objcopy
+OBJDUMP		= $(TC)-objdump
+SIZE		= $(TC)-size
+
+###################################################
+# Set Board
+DEFS 	= -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -DUSE_USB_OTG_FS -DARM_MATH_CM4 -DAUTOSTART_ENABLE
+
+# Set Include Paths
+INCS 	= 	-I$(CONTIKI_CPU)/Libraries/CMSIS/ST/STM32F4xx/Include \
+			-I$(CONTIKI_CPU)/Libraries/CMSIS/Include \
+			-I$(CONTIKI_CPU)/Libraries/STM32F4xx_StdPeriph_Driver/inc
+			
+# Set Libraries
+LIBSNO		= -lm
+
+# Set Compilation and Linking Flags
+CFLAGS 		= $(DEFS) $(INCS)
+CFLAGS		+= -g -Wall -Wno-missing-braces -std=c99 
+CFLAGS		+= -O0 -ffunction-sections -fdata-sections -ffast-math -fsingle-precision-constant
+CFLAGS		+= -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+
+ASFLAGS 	= -g -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+
+LDFLAGS 	= -g -T$(CONTIKI_CPU)/stm32f4_flash.ld $(LIBSNO) \
+			-Xlinker --gc-sections \
+			-Wl,-Map,$(TARGET).map \
+			-Wl,-nostdlib
+
+###################################################
+
+CONTIKI_CPU_DIRS = . \
+				   ../../core/dev/ \
+				   ./dev \
+				   ./Libraries/STM32F4xx_StdPeriph_Driver/src
+
+CPU_INIT_S = startup_stm32f4xx.S
+CMSIS_SOURCEFILES = system_stm32f4xx.c
+DRIVER_SOURCEFILES = misc.c stm32f4xx_rcc.c stm32f4xx_gpio.c stm32f4xx_tim.c stm32f4xx_usart.c  \
+stm32f4xx_dbgmcu.c
+CONTIKI_MACH = clock.c rtimer-arch.c leds-arch.c uart1.c uip_arch.c slip_uart1.c
+CONTIKI_DEV = leds.c slip.c
+CONTIKI_SOURCEFILES += $(CPU_INIT_S) $(CMSIS_SOURCEFILES) $(DRIVER_SOURCEFILES) $(CONTIKI_MACH) $(CONTIKI_DEV)  \
+					    stm32f4xx_it.c symbols.c
+					    
+###################################################
+# Compilation rules
+
+$(OBJECTDIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+	
+$(OBJECTDIR)/%.o: %.S
+	$(CC) $(ASFLAGS) -c -o $@ $<
+	
+%.co: %.c
+	$(CC) $(CFLAGS) $< -c -o $@
+
+%.$(TARGET): %.co $(PROJECT_OBJECTFILES) $(PROJECT_LIBRARIES) contiki-$(TARGET).a $(CONTIKI_CPU)/e_stdio/e_stdio_intonly_thumb2.a
+	$(CC) $(LDFLAGS) $(TARGET_STARTFILES) ${filter-out %.a,$^} ${filter %.a,$^} $(TARGET_LIBFILES) -o $@
+	@$(SIZE) --format=berkeley $@
+	@$(OBJDUMP) -h -S $@ > $(TARGET).lst
+	$(OBJCOPY) $@ -O ihex $(TARGET).ihex
+	$(OBJCOPY) -O binary $@ $(TARGET).bin
+	
+$(CONTIKI_CPU)/e_stdio/e_stdio_intonly_thumb2.a:
+	make TC=$(TC) -C $(CONTIKI_CPU)/e_stdio
