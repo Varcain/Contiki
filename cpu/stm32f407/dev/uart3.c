@@ -1,27 +1,27 @@
 #include <stm32f4xx.h>
-#include "dev/uart1.h"
+#include "dev/uart3.h"
 #include <stm32f4xx_usart.h>
 
-static int (*uart1_input_handler)(unsigned char c);
+static int (*uart3_input_handler)(unsigned char c);
 
 /*---------------------------------------------------------------------------*/
 uint8_t
-uart1_active(void)
+uart3_active(void)
 {
 	return 0;
 }
 /*---------------------------------------------------------------------------*/
 void
-uart1_set_input(int (*input)(unsigned char c))
+uart3_set_input(int (*input)(unsigned char c))
 {
-  uart1_input_handler = input;
+  uart3_input_handler = input;
 }
 /*---------------------------------------------------------------------------*/
 void
-uart1_writeb(unsigned char c)
+uart3_writeb(unsigned char c)
 {
-	USART_SendData(USART1,c);
-	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE)== RESET);
+	USART_SendData(USART3,c);
+	while(USART_GetFlagStatus(USART3, USART_FLAG_TXE)== RESET);
 }
 /*---------------------------------------------------------------------------*/
 /**
@@ -29,7 +29,7 @@ uart1_writeb(unsigned char c)
  *
  */
 void
-uart1_init(unsigned long ubr)
+uart3_init(unsigned long ubr)
 {
 //
 //  Init structures
@@ -40,21 +40,21 @@ uart1_init(unsigned long ubr)
 //
 //	RCC
 //
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
 //
-// USART1 config
+// USART3 config
 //
-	// USART1 Pin config
+	// USART3 Pin config
 	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF;
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_6 | GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_8 | GPIO_Pin_9;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;
-	GPIO_Init(GPIOB,&GPIO_InitStructure);
+	GPIO_Init(GPIOD,&GPIO_InitStructure);
 
-  	GPIO_PinAFConfig(GPIOB,GPIO_PinSource6,GPIO_AF_USART1);
-  	GPIO_PinAFConfig(GPIOB,GPIO_PinSource7,GPIO_AF_USART1);
+  	GPIO_PinAFConfig(GPIOD,GPIO_PinSource8,GPIO_AF_USART3);
+  	GPIO_PinAFConfig(GPIOD,GPIO_PinSource9,GPIO_AF_USART3);
 
 	USARTInitStructure.USART_BaudRate=115200;
 	USARTInitStructure.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
@@ -62,15 +62,15 @@ uart1_init(unsigned long ubr)
 	USARTInitStructure.USART_Parity=USART_Parity_No;
 	USARTInitStructure.USART_StopBits=USART_StopBits_1;
 	USARTInitStructure.USART_WordLength=USART_WordLength_8b;
-	USART_Init(USART1,&USARTInitStructure);
-	USART_Cmd(USART1, ENABLE);
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+	USART_Init(USART3,&USARTInitStructure);
+	USART_Cmd(USART3, ENABLE);
+	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 
 //
 //  NVIC config
 //
-	// USART1
-	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+	// USART3
+	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -79,23 +79,23 @@ uart1_init(unsigned long ubr)
 
 
 /*---------------------------------------------------------------------------*/
-void USART1_IRQHandler(void)
+void USART3_IRQHandler(void)
 {
 	uint8_t c;
 
-	if(USART_GetITStatus(USART1, USART_IT_RXNE))
+	if(USART_GetITStatus(USART3, USART_IT_RXNE))
 	{
-		GPIO_SetBits(GPIOC, GPIO_Pin_9);
-		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
-		c=USART_ReceiveData(USART1);
-		if(uart1_input_handler != NULL)
+		GPIO_SetBits(GPIOC, GPIO_Pin_8);
+		USART_ClearITPendingBit(USART3,USART_IT_RXNE);
+		c=USART_ReceiveData(USART3);
+		if(uart3_input_handler != NULL)
 		{
-			uart1_input_handler(c);
+			uart3_input_handler(c);
 		}
-		GPIO_ResetBits(GPIOC, GPIO_Pin_9);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_8);
 	}
-	if(USART_GetITStatus(USART1, USART_IT_ORE|USART_IT_IDLE))
+	if(USART_GetITStatus(USART3, USART_IT_ORE|USART_IT_IDLE))
 	{
-		USART_ClearITPendingBit(USART1,USART_IT_ORE|USART_IT_IDLE);
+		USART_ClearITPendingBit(USART3,USART_IT_ORE|USART_IT_IDLE);
 	}
 }

@@ -36,6 +36,7 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_LOGGING         1
 #define UIP_CONF_UDP_CHECKSUMS   1
 #define UIP_CONF_LLH_LEN		  0
+#define UIP_CONF_IP_FORWARD		  1
 
 typedef unsigned long clock_time_t;
 
