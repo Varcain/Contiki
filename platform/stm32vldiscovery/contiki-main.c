@@ -8,6 +8,7 @@
 #include <dev/leds.h>
 #include <dev/uart3.h>
 #include <dev/slip.h>
+#include <dev/serial-line.h>
 
 #include <shell.h>
 
@@ -22,7 +23,7 @@ static struct uip_fw_netif slipif =
 
 int __attribute__(( weak )) putchar(int c)
 {
-  //uart3_writeb(c);
+  uart3_writeb(c);
   return c;
 }
 
@@ -39,9 +40,9 @@ main(void)
 	DBGMCU_Config(DBGMCU_SLEEP | DBGMCU_STOP | DBGMCU_STANDBY, ENABLE);
 
 	uart3_init(0);
-	slip_arch_init(0);
+	//slip_arch_init(0);
 	leds_init();
-	//printf("\rStarting Contiki...\n\r");
+	printf("\rStarting Contiki on STM32VL Discovery...\n\r");
 
 	clock_init();
 	process_init();

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define DEBUG	1
+
 #define CC_CONF_REGISTER_ARGS          1
 #define CC_CONF_FUNCTION_POINTER_ARGS  1
 #define CC_CONF_FASTCALL

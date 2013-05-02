@@ -7,11 +7,20 @@
 
 #include <dev/leds.h>
 #include <dev/uart1.h>
+#include <dev/uart3.h>
 #include <dev/slip.h>
 
 #include <shell.h>
 
 #include "stm32f4xx_dbgmcu.h"
+
+#define DEBUG 1
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
 
 uip_ipaddr_t hostaddr,netmask, draddr;
 
@@ -22,7 +31,7 @@ static struct uip_fw_netif slipif =
 
 int __attribute__(( weak )) putchar(int c)
 {
-  //uart3_writeb(c);
+  uart1_writeb(c);
   return c;
 }
 
@@ -38,16 +47,17 @@ main(void)
 {
 	//DBGMCU_Config(DBGMCU_SLEEP | DBGMCU_STOP | DBGMCU_STANDBY, ENABLE);
 
+	uart3_init(0);
 	uart1_init(0);
 	slip_arch_init(0);
 	leds_init();
-	//printf("\rStarting Contiki...\n\r");
+	printf("\rStarting Contiki on STM32F4 Discovery...\n\r");
 
 	clock_init();
 	process_init();
 
 	//serial_line_init();
-	//uart3_set_input(serial_line_input_byte);
+	//uart1_set_input(serial_line_input_byte);
 
 	uip_init();
 	uip_fw_init();
@@ -80,12 +90,12 @@ main(void)
 void
 log_message(char *m1, char *m2)
 {
-	shell_output_str(NULL, m1, m2);
+	printf("%s%s\n", m1, m2);
 }
 /*---------------------------------------------------------------------------*/
 void
 uip_log(char *m)
 {
-	shell_output_str(NULL, m, "\n\r");
+	printf("%s\n", m);
 }
 /*---------------------------------------------------------------------------*/

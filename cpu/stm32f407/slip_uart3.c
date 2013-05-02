@@ -46,16 +46,16 @@
 #include "contiki.h"
 
 #include "dev/slip.h"
-#include "dev/uart1.h"
+#include "dev/uart3.h"
 
 void
 slip_arch_init(unsigned long ubr)
 {
-  uart1_set_input(slip_input_byte);
+  uart3_set_input(slip_input_byte);
 }
 
 void
 slip_arch_writeb(unsigned char c)
 {
-  uart1_writeb(c);
+  uart3_writeb(c);
 }

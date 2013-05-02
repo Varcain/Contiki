@@ -48,7 +48,7 @@ uart3_init(unsigned long ubr)
 //
 // USART3 config
 //
-	USARTInitStructure.USART_BaudRate=115200;
+	USARTInitStructure.USART_BaudRate=9600;
 	USARTInitStructure.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
 	USARTInitStructure.USART_Mode=USART_Mode_Rx|USART_Mode_Tx;
 	USARTInitStructure.USART_Parity=USART_Parity_No;
