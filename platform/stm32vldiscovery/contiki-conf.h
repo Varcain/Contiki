@@ -3,6 +3,14 @@
 
 #include <stdint.h>
 
+#define NETSTACK_CONF_RADIO		xbee_radio_driver
+//#define NETSTACK_CONF_RDC
+#define NETSTACK_CONF_MAC		csma_driver
+#define NETSTACK_CONF_NETWORK	rime_driver
+#define NETSTACK_CONF_FRAMER	framer_nullmac
+
+#define PACKETBUF_CONF_SIZE 52
+
 #define CC_CONF_REGISTER_ARGS          1
 #define CC_CONF_FUNCTION_POINTER_ARGS  1
 #define CC_CONF_FASTCALL
@@ -14,22 +22,16 @@
 #define WITH_DNS 1
 #define WITH_PFS 1
 #define CONNECTIONS 2
-#define MTU_SIZE 500
+#define MTU_SIZE 100
 
 #define WITH_UIP 1
 #define WITH_UIP6 0
 #define UIP_CONF_IPV6 0
 
-typedef uint8_t   u8_t;
-typedef uint16_t u16_t;
-typedef uint32_t u32_t;
-typedef  int32_t s32_t;
-typedef unsigned short uip_stats_t;
-
 #define UIP_CONF_UDP             1
-#define UIP_CONF_MAX_CONNECTIONS 40
-#define UIP_CONF_MAX_LISTENPORTS 40
-#define UIP_CONF_BUFFER_SIZE     420
+#define UIP_CONF_MAX_CONNECTIONS 5
+#define UIP_CONF_MAX_LISTENPORTS 5
+#define UIP_CONF_BUFFER_SIZE     256
 #define UIP_CONF_BYTE_ORDER      UIP_LITTLE_ENDIAN
 #define UIP_CONF_TCP      		  1
 #define UIP_CONF_TCP_SPLIT       1
@@ -45,6 +47,12 @@ typedef unsigned long clock_time_t;
 
 /* Not part of C99 but actually present */
 int strcasecmp(const char*, const char*);
+
+typedef uint8_t   u8_t;
+typedef uint16_t u16_t;
+typedef uint32_t u32_t;
+typedef  int32_t s32_t;
+typedef unsigned short uip_stats_t;
 
 #define CCIF
 #define CLIF

@@ -5,21 +5,13 @@
 
 /*---------------------------------------------------------------------------*/
 PROCESS(shell_init_process, "Shell init process");
-AUTOSTART_PROCESSES(&telnetd_process, &shell_init_process);
+AUTOSTART_PROCESSES(&shell_init_process, &telnetd_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(shell_init_process, ev, data)
 {
 	PROCESS_BEGIN();
-	shell_ps_init();
-	//  shell_netstat_init()
-	//shell_memdebug_init();
-	//  shell_run_init();
-//	shell_text_init();
-	//  shell_time_init();
-	//  shell_ping_init();
-	//  shell_vars_init();
-	shell_blink_init();
-	//  shell_crc_init();
+
+	shell_rime_ping_init();
 
 	PROCESS_END();
 }

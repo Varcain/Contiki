@@ -31,7 +31,7 @@ static struct uip_fw_netif slipif =
 
 int __attribute__(( weak )) putchar(int c)
 {
-  uart1_writeb(c);
+  //uart1_writeb(c);
   return c;
 }
 
@@ -48,7 +48,7 @@ main(void)
 	//DBGMCU_Config(DBGMCU_SLEEP | DBGMCU_STOP | DBGMCU_STANDBY, ENABLE);
 
 	uart3_init(0);
-	uart1_init(0);
+	//uart1_init(0);
 	slip_arch_init(0);
 	leds_init();
 	printf("\rStarting Contiki on STM32F4 Discovery...\n\r");
@@ -76,6 +76,19 @@ main(void)
 
 	process_start(&etimer_process, NULL);
 	ctimer_init();
+
+	/* Networking stack. */
+	NETSTACK_RADIO.init();
+	NETSTACK_RDC.init();
+	NETSTACK_MAC.init();
+	NETSTACK_NETWORK.init();
+	{
+		rimeaddr_t rimeaddr;
+
+		rimeaddr.u8[0] = 0x01;
+		rimeaddr.u8[1] = 0x00;
+		rimeaddr_set_node_addr(&rimeaddr);
+	}
 
 	autostart_start(autostart_processes);
 

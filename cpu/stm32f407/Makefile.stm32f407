@@ -54,7 +54,7 @@ CPU_INIT_S = startup_stm32f4xx.S
 CMSIS_SOURCEFILES = system_stm32f4xx.c
 DRIVER_SOURCEFILES = misc.c stm32f4xx_rcc.c stm32f4xx_gpio.c stm32f4xx_tim.c stm32f4xx_usart.c  \
 stm32f4xx_dbgmcu.c
-CONTIKI_MACH = clock.c rtimer-arch.c leds-arch.c uart1.c uart3.c uip_arch.c slip_uart3.c
+CONTIKI_MACH = clock.c rtimer-arch.c leds-arch.c uart1.c uart3.c uip_arch.c slip_uart3.c xbee.c
 CONTIKI_DEV = leds.c slip.c
 CONTIKI_SOURCEFILES += $(CPU_INIT_S) $(CMSIS_SOURCEFILES) $(DRIVER_SOURCEFILES) $(CONTIKI_MACH) $(CONTIKI_DEV)  \
 					    stm32f4xx_it.c symbols.c

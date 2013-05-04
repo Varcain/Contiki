@@ -18,6 +18,16 @@ PROCESS_THREAD(shell_init_process, ev, data)
 	shell_time_init();
 	shell_ping_init();
 	shell_blink_init();
+	shell_netperf_init();
+	shell_rime_init();
+	shell_rime_debug_init();
+	shell_rime_debug_runicast_init();
+	shell_rime_neighbors_init();
+	shell_rime_netcmd_init();
+	shell_rime_ping_init();
+	shell_rime_sendcmd_init();
+	shell_rime_sniff_init();
+	shell_rime_unicast_init();
 
 	PROCESS_END();
 }

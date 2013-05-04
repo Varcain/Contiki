@@ -1,7 +1,7 @@
 CONTIKI_PROJECT = stm32vldiscovery-tests
 all: $(CONTIKI_PROJECT)
 
-APPS = telnetd program-handler shell
+APPS = shell telnetd
 
 CONTIKI = ../..
 include $(CONTIKI)/Makefile.include
