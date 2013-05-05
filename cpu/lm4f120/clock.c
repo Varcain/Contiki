@@ -44,9 +44,8 @@ clock_init(void)
 {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
-
-	TimerLoadSet(TIMER0_BASE, TIMER_A, ROM_SysCtlClockGet());
-
+	TimerLoadSet(TIMER0_BASE, TIMER_A, ROM_SysCtlClockGet()/1000);
+	TimerControlStall(TIMER0_BASE,TIMER_A,true);
 	TimerEnable(TIMER0_BASE, TIMER_A);
 
 	ROM_IntEnable(INT_TIMER0A);

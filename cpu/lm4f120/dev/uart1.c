@@ -31,7 +31,9 @@ void
 uart1_writeb(unsigned char c)
 {
 	//ROM_UARTCharPutNonBlocking(UART1_BASE, c);
+	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
 	UARTCharPut(UART1_BASE,c);
+	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0);
 }
 /*---------------------------------------------------------------------------*/
 /**
@@ -56,6 +58,9 @@ uart1_init(unsigned long ubr)
 
 	ROM_IntEnable(INT_UART1);
 	ROM_UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT);
+
+	ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+	ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2|GPIO_PIN_1);
 }
 
 
@@ -64,6 +69,7 @@ void UART1IntHandler(void)
 {
     unsigned long ulStatus;
 
+    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
     ulStatus = ROM_UARTIntStatus(UART1_BASE, true);
     ROM_UARTIntClear(UART1_BASE, ulStatus);
 
@@ -71,4 +77,5 @@ void UART1IntHandler(void)
     {
     	uart1_input_handler(ROM_UARTCharGetNonBlocking(UART1_BASE));
     }
+    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
 }

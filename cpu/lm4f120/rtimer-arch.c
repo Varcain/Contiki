@@ -75,9 +75,8 @@ rtimer_arch_init(void)
 	scheduled = 0;
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
 	TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-
-	TimerLoadSet(TIMER1_BASE, TIMER_A, ROM_SysCtlClockGet()/500000);
-
+	TimerLoadSet(TIMER1_BASE, TIMER_A, ROM_SysCtlClockGet()/1000);
+	TimerControlStall(TIMER1_BASE,TIMER_A,true);
 	TimerEnable(TIMER1_BASE, TIMER_A);
 
 	ROM_IntEnable(INT_TIMER1A);

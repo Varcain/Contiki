@@ -28,6 +28,12 @@ PROCESS_THREAD(shell_init_process, ev, data)
 	shell_rime_sendcmd_init();
 	shell_rime_sniff_init();
 	shell_rime_unicast_init();
+	shell_collect_view_init();
+	//shell_rsh_init();
+	shell_sendtest_init();
+	//shell_tcpsend_init();
+	//shell_udpsend_init();
+	//shell_wget_init();
 
 	PROCESS_END();
 }

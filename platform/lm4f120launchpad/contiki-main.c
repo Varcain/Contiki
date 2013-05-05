@@ -62,9 +62,8 @@ main(void)
     //
     // Set the clocking to run directly from the crystal.
     //
-    ROM_SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
+    ROM_SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
                        SYSCTL_XTAL_16MHZ);
-
 
 	leds_init();
 	uart0_init(0);
@@ -82,7 +81,7 @@ main(void)
 	uip_sethostaddr(&hostaddr);
 	uip_ipaddr(&netmask, 255, 255, 0, 0);
 	uip_setnetmask(&netmask);
-	uip_ipaddr(&netmask, 172, 16, 0, 3);
+	uip_ipaddr(&netmask, 172, 16, 0, 1);
 	uip_setdraddr(&draddr);
 
 	process_start(&etimer_process, NULL);
