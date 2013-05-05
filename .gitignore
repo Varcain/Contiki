@@ -11,3 +11,4 @@ patches-*
 tools/tunslip6
 *.lst
 stm32*.stm32*
+lm4f*.lm4f*
