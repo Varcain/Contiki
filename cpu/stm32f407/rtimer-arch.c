@@ -64,7 +64,7 @@ rtimer_arch_init(void)
 {
 	scheduled = 0;
 	/* Setup SysTick Timer for 1 msec interrupts  */
- 	if (SysTick_Config(SystemCoreClock / 1000))
+ 	if (SysTick_Config((SystemCoreClock / 8) / 1000))
     { 
     	/* Capture error */ 
     	//while (1);

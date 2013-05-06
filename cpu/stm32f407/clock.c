@@ -19,6 +19,7 @@ void TIM4_IRQHandler(void)
 
   if (--second_countdown == 0) {
     current_seconds++;
+    GPIO_ToggleBits(GPIOD, GPIO_Pin_13);
     second_countdown = CLOCK_SECOND;
   }	
 }
@@ -37,8 +38,8 @@ clock_init(void)
 	/* RCC TIM4 clock enable */
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	/* TIM4 config for 1ms*INTERVAL interrupts */
-    TIM_TimeBaseInitStructure.TIM_Prescaler = 0;
-    TIM_TimeBaseInitStructure.TIM_Period = (uint32_t)((42000000/1000));
+    TIM_TimeBaseInitStructure.TIM_Prescaler = 1;
+    TIM_TimeBaseInitStructure.TIM_Period = (uint32_t)((42000000/1000)-1);
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseInit(TIM4, &TIM_TimeBaseInitStructure);

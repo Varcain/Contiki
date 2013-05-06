@@ -27,7 +27,7 @@ uip_ipaddr_t hostaddr,netmask, draddr;
 #include "net/uip-fw-drv.h"
 #include "net/uip-over-mesh.h"
 static struct uip_fw_netif slipif =
-  {UIP_FW_NETIF(172,16,0,9, 255,255,0,0, slip_send)};
+  {UIP_FW_NETIF(192,168,1,2, 255,255,255,255, slip_send)};
 static struct uip_fw_netif meshif =
   {UIP_FW_NETIF(172,16,0,0, 255,255,0,0, uip_over_mesh_send)};
 
@@ -63,31 +63,6 @@ main(void)
 	clock_init();
 	process_init();
 
-	//serial_line_init();
-	//uart1_set_input(serial_line_input_byte);
-
-	uip_init();
-	uip_fw_init();
-	process_start(&tcpip_process, NULL);
-	process_start(&slip_process, NULL);
-	process_start(&uip_fw_process, NULL);
-
-	uip_ipaddr(&hostaddr, 172, 16, 0, 1);
-	uip_ipaddr_copy(&meshif.ipaddr, &hostaddr);
-	uip_sethostaddr(&hostaddr);
-	uip_ipaddr(&netmask, 255, 255, 0, 0);
-	uip_setnetmask(&netmask);
-	uip_over_mesh_set_net(&hostaddr, &netmask);
-	uip_over_mesh_set_gateway_netif(&slipif);
-	uip_fw_default(&meshif);
-	uip_fw_register(&slipif);
-	uip_over_mesh_init(UIP_OVER_MESH_CHANNEL);
-
-	//uip_ipaddr(&netmask, 172, 16, 0, 2);
-	//uip_setdraddr(&draddr);
-	//uip_fw_register(&slipif);
-	//uip_fw_default(&slipif);
-
 	process_start(&etimer_process, NULL);
 	ctimer_init();
 
@@ -99,10 +74,27 @@ main(void)
 	{
 		rimeaddr_t rimeaddr;
 
-		rimeaddr.u8[0] = 0x01;
-		rimeaddr.u8[1] = 0x00;
+		rimeaddr.u8[0] = 0x00;
+		rimeaddr.u8[1] = 0x01;
 		rimeaddr_set_node_addr(&rimeaddr);
 	}
+
+	process_start(&tcpip_process, NULL);
+	process_start(&slip_process, NULL);
+	process_start(&uip_fw_process, NULL);
+
+	uip_init();
+
+	uip_ipaddr(&hostaddr, 172, 16, 0, 1);
+	uip_ipaddr_copy(&meshif.ipaddr, &hostaddr);
+	uip_sethostaddr(&hostaddr);
+	uip_ipaddr(&netmask, 255, 255, 0, 0);
+	uip_setnetmask(&netmask);
+	uip_over_mesh_set_net(&hostaddr, &netmask);
+	uip_over_mesh_set_gateway_netif(&slipif);
+	uip_fw_default(&meshif);
+	//uip_fw_register(&slipif);
+	uip_over_mesh_init(UIP_OVER_MESH_CHANNEL);
 
 	uip_over_mesh_set_gateway(&rimeaddr_node_addr);
 	uip_over_mesh_make_announced_gateway();

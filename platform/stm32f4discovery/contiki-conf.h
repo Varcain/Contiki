@@ -11,7 +11,8 @@
 #define NETSTACK_CONF_NETWORK	rime_driver
 #define NETSTACK_CONF_FRAMER	framer_nullmac
 
-#define PACKETBUF_CONF_SIZE 52
+//#define PACKETBUF_CONF_SIZE
+//#define	 PACKETBUF_CONF_HDR_SIZE
 
 #define CC_CONF_REGISTER_ARGS          1
 #define CC_CONF_FUNCTION_POINTER_ARGS  1

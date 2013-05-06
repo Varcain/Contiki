@@ -18,7 +18,6 @@
 #include <dev/uart1.h>
 #include <dev/uart0.h>
 
-#include "serial-shell.h"
 #include "serial-line.h"
 
 #include <shell.h>
@@ -33,11 +32,20 @@
 
 uip_ipaddr_t hostaddr,netmask, draddr;
 
+#include "net/uip-fw-drv.h"
+#include "net/uip-over-mesh.h"
+
+static struct uip_fw_netif meshif =
+  {UIP_FW_NETIF(172,16,0,0, 255,255,0,0, uip_over_mesh_send)};
+
+#define UIP_OVER_MESH_CHANNEL 8
+static uint8_t is_gateway;
+
 #undef putchar
 
 int __attribute__(( weak )) putchar(int c)
 {
-  uart0_writeb(c);
+  //uart0_writeb(c);
   return c;
 }
 
@@ -72,24 +80,8 @@ main(void)
 	clock_init();
 	process_init();
 
-	uip_init();
-	uip_fw_init();
-	process_start(&tcpip_process, NULL);
-	process_start(&uip_fw_process, NULL);
-
-	uip_ipaddr(&hostaddr, 172, 16, 0, 4);
-	uip_sethostaddr(&hostaddr);
-	uip_ipaddr(&netmask, 255, 255, 0, 0);
-	uip_setnetmask(&netmask);
-	uip_ipaddr(&netmask, 172, 16, 0, 1);
-	uip_setdraddr(&draddr);
-
 	process_start(&etimer_process, NULL);
 	ctimer_init();
-
-	serial_line_init();
-	uart0_set_input(serial_line_input_byte);
-	serial_shell_init();
 
 	/* Networking stack. */
 	NETSTACK_RADIO.init();
@@ -99,10 +91,26 @@ main(void)
 	{
 		rimeaddr_t rimeaddr;
 
-		rimeaddr.u8[0] = 0x03;
-		rimeaddr.u8[1] = 0x00;
+		rimeaddr.u8[0] = 0x00;
+		rimeaddr.u8[1] = 0x03;
 		rimeaddr_set_node_addr(&rimeaddr);
 	}
+
+	process_start(&tcpip_process, NULL);
+	process_start(&uip_fw_process, NULL);
+
+	uip_init();
+
+	uip_ipaddr(&hostaddr, 172, 16, 0, 3);
+	uip_ipaddr_copy(&meshif.ipaddr, &hostaddr);
+	uip_sethostaddr(&hostaddr);
+	uip_ipaddr(&netmask, 255, 255, 0, 0);
+	uip_setnetmask(&netmask);
+
+	uip_over_mesh_set_net(&hostaddr, &netmask);
+	uip_fw_default(&meshif);
+	//uip_fw_register(&slipif);
+	uip_over_mesh_init(UIP_OVER_MESH_CHANNEL);
 
 	autostart_start(autostart_processes);
 
@@ -117,12 +125,12 @@ main(void)
 void
 log_message(char *m1, char *m2)
 {
-	printf("%s%s\n", m1, m2);
+	//printf("%s%s\n", m1, m2);
 }
 /*---------------------------------------------------------------------------*/
 void
 uip_log(char *m)
 {
-	printf("%s\n", m);
+	//printf("%s\n", m);
 }
 /*---------------------------------------------------------------------------*/
