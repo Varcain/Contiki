@@ -3,11 +3,17 @@
 
 #include <stdint.h>
 
+#define CLOCK_CONF_SECOND 1000
+
 #define NETSTACK_CONF_RADIO		xbee_radio_driver
 //#define NETSTACK_CONF_RDC
 //#define NETSTACK_CONF_MAC		csma_driver
 #define NETSTACK_CONF_NETWORK	rime_driver
 #define NETSTACK_CONF_FRAMER	framer_nullmac
+
+#define	 RIME_CONF_BROADCAST_ANNOUNCEMENT_BUMP_TIME	CLOCK_SECOND * 2
+#define RIME_CONF_BROADCAST_ANNOUNCEMENT_MIN_TIME	CLOCK_SECOND * 5
+#define RIME_CONF_BROADCAST_ANNOUNCEMENT_MAX_TIME  CLOCK_SECOND * 10
 
 //#define PACKETBUF_CONF_SIZE 52
 
@@ -40,8 +46,6 @@
 #define UIP_CONF_REASSEMBLY		  0
 
 typedef unsigned long clock_time_t;
-
-#define CLOCK_CONF_SECOND 1000
 
 #define LOG_CONF_ENABLED 1
 

@@ -56,7 +56,7 @@ uart3_init(unsigned long ubr)
   	GPIO_PinAFConfig(GPIOD,GPIO_PinSource8,GPIO_AF_USART3);
   	GPIO_PinAFConfig(GPIOD,GPIO_PinSource9,GPIO_AF_USART3);
 
-	USARTInitStructure.USART_BaudRate=115200;
+	USARTInitStructure.USART_BaudRate=230400 ;
 	USARTInitStructure.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
 	USARTInitStructure.USART_Mode=USART_Mode_Tx|USART_Mode_Rx;
 	USARTInitStructure.USART_Parity=USART_Parity_No;

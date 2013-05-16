@@ -8,7 +8,7 @@ CUSTOM_RULE_LINK=yes
 
 ###################################################
 # Set toolchain
-TC = /media/data/x-tools/cortex-m4/bin/arm-cortex_m4-eabi
+TC = /home/limak/x-tools/arm-cortex_m4-eabi/bin/arm-cortex_m4-eabi
 
 # Set Tools
 CC			= $(TC)-gcc

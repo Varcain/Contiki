@@ -52,7 +52,7 @@ uart1_init(unsigned long ubr)
 	GPIOPinConfigure(GPIO_PB1_U1TX);
 	ROM_GPIOPinTypeUART(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
-	ROM_UARTConfigSetExpClk(UART1_BASE, ROM_SysCtlClockGet(), 9600,
+	ROM_UARTConfigSetExpClk(UART1_BASE, ROM_SysCtlClockGet(), 250000,
 			(UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
 					UART_CONFIG_PAR_NONE));
 
