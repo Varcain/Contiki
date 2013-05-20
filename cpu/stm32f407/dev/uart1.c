@@ -85,19 +85,21 @@ void USART1_IRQHandler(void)
 {
 	uint8_t c;
 
+	GPIO_SetBits(GPIOD, GPIO_Pin_12);
+
 	if(USART_GetITStatus(USART1, USART_IT_RXNE))
 	{
-		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
 		c=USART_ReceiveData(USART1);
 		if(uart1_input_handler != NULL)
 		{
 			uart1_input_handler(c);
 		}
-		GPIO_ResetBits(GPIOD, GPIO_Pin_12);
 	}
 	if(USART_GetITStatus(USART1, USART_IT_ORE|USART_IT_IDLE))
 	{
 		USART_ClearITPendingBit(USART1,USART_IT_ORE|USART_IT_IDLE);
 	}
+
+	GPIO_ResetBits(GPIOD, GPIO_Pin_12);
 }

@@ -85,14 +85,12 @@ void USART3_IRQHandler(void)
 
 	if(USART_GetITStatus(USART3, USART_IT_RXNE))
 	{
-		//GPIO_SetBits(GPIOC, GPIO_Pin_8);
 		USART_ClearITPendingBit(USART3,USART_IT_RXNE);
 		c=USART_ReceiveData(USART3);
 		if(uart3_input_handler != NULL)
 		{
 			uart3_input_handler(c);
 		}
-		//GPIO_ResetBits(GPIOC, GPIO_Pin_8);
 	}
 	if(USART_GetITStatus(USART3, USART_IT_ORE|USART_IT_IDLE))
 	{

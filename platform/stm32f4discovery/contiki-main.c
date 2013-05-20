@@ -5,10 +5,13 @@
 #include <stddef.h>
 #include <stm32f4xx.h>
 
+#include "lib/sensors.h"
+
 #include <dev/leds.h>
 #include <dev/uart1.h>
 #include <dev/uart3.h>
 #include <dev/slip.h>
+#include <dev/temperature-sensor.h>
 
 #include <shell.h>
 
@@ -21,6 +24,8 @@
 #else
 #define PRINTF(...)
 #endif
+
+SENSORS(&temperature_sensor);
 
 uip_ipaddr_t hostaddr,netmask, draddr;
 
@@ -65,6 +70,8 @@ main(void)
 
 	process_start(&etimer_process, NULL);
 	ctimer_init();
+
+	process_start(&sensors_process, NULL);
 
 	/* Networking stack. */
 	NETSTACK_RADIO.init();

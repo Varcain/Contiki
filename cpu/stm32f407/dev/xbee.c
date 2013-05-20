@@ -19,7 +19,7 @@ enum xbee_rcv_states  {
 };
 
 int c;
-// macro for obtaining next byte for state machine
+/* macro for obtaining next byte for state machine */
 #define xbee_getByte()	c = ringbuf_get(&rxbuf); \
 						if(c == -1) \
 						{ \
@@ -33,8 +33,6 @@ int c;
 
 static struct ringbuf rxbuf;
 static uint8_t rxbuf_data[XBEE_BUFSIZE];
-
-static volatile uint16_t last_packet_timestamp;
 
 int xbee_input_handler(unsigned char c);
 
@@ -57,6 +55,14 @@ prepare(const void *payload, unsigned short payload_len)
 	unsigned char txBuf[108]; // 108 is the maximum buffer size needed
 	int ptr;
 	unsigned char chksum;
+
+	/* drop the packet if payload is bigger than max XBee packet size */
+	if(payload_len > XBEE_PACKET_SIZE)
+	{
+		/* loop forever for debug purpose */
+		while(1);
+	}
+
 	/* Prepare XBee API frame here */
 	ptr = 0;
 	txBuf[ptr++] = XBEE_DELIMITER;
@@ -169,11 +175,9 @@ PROCESS_THREAD(xbee_process, ev, data)
 	static unsigned char ourChksum = 0;
 	static unsigned int msgLen = 0;
 	PROCESS_BEGIN();
-	//PRINTF("xbee_process: started\n");
 
 	while(1)
 	{
-		//PRINTF("xbee_process: calling receiver callback\n");
 		/* This might look ugly since I can't use switch statements inside a protothread
 		* state machine is used to handle fragmented packets from XBee module
 		* (rare but can occur)
@@ -285,20 +289,19 @@ PROCESS_THREAD(xbee_process, ev, data)
 
 int xbee_input_handler(unsigned char c)
 {
-	static uint8_t overflow = 0; /* Buffer overflow: ignore until END */
+	static uint8_t overflow = 0;
 
 	if(!overflow)
 	{
 		/* Add character */
 		if(ringbuf_put(&rxbuf, c) == 0)
 		{
-			/* Buffer overflow: ignore the rest of the line */
 			overflow = 1;
 		}
 	}
 	else
 	{
-		// Buffer overflowed, no handling at the moment
+		/* Buffer overflowed, no handling at the moment */
 		while(1);
 		overflow = 0;
 	}
