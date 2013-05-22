@@ -53,9 +53,9 @@ CONTIKI_CPU_DIRS = . \
 				   ../../../Tivaware/examples/boards/ek-tm4c123gxl/blinky
 
 CPU_INIT_S = startup_gcc.c
-DRIVER_SOURCEFILES = tim.c sysctl.c gpio.c uart.c
+DRIVER_SOURCEFILES = tim.c sysctl.c gpio.c uart.c adc.c
 CONTIKI_MACH = clock.c rtimer-arch.c leds-arch.c uart1.c uart0.c uip_arch.c xbee.c
-CONTIKI_DEV = leds.c
+CONTIKI_DEV = leds.c sensors.c temperature-sensor.c
 CONTIKI_SOURCEFILES += $(CPU_INIT_S) $(DRIVER_SOURCEFILES) $(CONTIKI_MACH) $(CONTIKI_DEV)  \
 		       symbols.c
 					    

@@ -58,9 +58,6 @@ uart1_init(unsigned long ubr)
 
 	ROM_IntEnable(INT_UART1);
 	ROM_UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT);
-
-	ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-	ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2|GPIO_PIN_1);
 }
 
 

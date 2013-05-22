@@ -10,6 +10,8 @@
 #include "driverlib/rom.h"
 #include "driverlib/sysctl.h"
 
+#include "lib/sensors.h"
+
 
 #include <stdio.h>
 #include <stddef.h>
@@ -17,6 +19,7 @@
 #include <dev/leds.h>
 #include <dev/uart1.h>
 #include <dev/uart0.h>
+#include <dev/temperature-sensor.h>
 
 #include "serial-line.h"
 
@@ -29,6 +32,8 @@
 #else
 #define PRINTF(...)
 #endif
+
+SENSORS(&temperature_sensor);
 
 uip_ipaddr_t hostaddr,netmask, draddr;
 
@@ -83,6 +88,8 @@ main(void)
 	process_start(&etimer_process, NULL);
 	ctimer_init();
 
+	process_start(&sensors_process, NULL);
+
 	/* Networking stack. */
 	NETSTACK_RADIO.init();
 	NETSTACK_RDC.init();
@@ -92,7 +99,7 @@ main(void)
 		rimeaddr_t rimeaddr;
 
 		rimeaddr.u8[0] = 0x00;
-		rimeaddr.u8[1] = 0x03;
+		rimeaddr.u8[1] = 0x02;
 		rimeaddr_set_node_addr(&rimeaddr);
 	}
 
@@ -101,7 +108,7 @@ main(void)
 
 	uip_init();
 
-	uip_ipaddr(&hostaddr, 172, 16, 0, 3);
+	uip_ipaddr(&hostaddr, 172, 16, 0, 2);
 	uip_ipaddr_copy(&meshif.ipaddr, &hostaddr);
 	uip_sethostaddr(&hostaddr);
 	uip_ipaddr(&netmask, 255, 255, 0, 0);
