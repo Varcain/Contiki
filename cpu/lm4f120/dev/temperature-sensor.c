@@ -43,7 +43,9 @@
 #include "driverlib/adc.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/rom.h"
 #include "math.h"
+#include "clock.h"
 
 const struct sensors_sensor temperature_sensor;
 static int active;
@@ -67,6 +69,8 @@ configure(int type, int value)
 	case SENSORS_HW_INIT:
 		active = 0;
 		SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+		// delay to prevent bus fault
+		clock_delay(5);
 		ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_ALWAYS, 0);
 		ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_TS |  ADC_CTL_END);
 		ADCSequenceEnable(ADC0_BASE, 3);

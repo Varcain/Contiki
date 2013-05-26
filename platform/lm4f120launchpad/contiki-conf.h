@@ -3,8 +3,12 @@
 
 #include <stdint.h>
 
-#define CSMA_CONF_MAX_MAC_TRANSMISSIONS		10
-#define CSMA_CONF_MAX_NEIGHBOR_QUEUES		10
+#define	 QUEUEBUF_CONF_NUM						20
+
+#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE	32
+
+#define CSMA_CONF_MAX_MAC_TRANSMISSIONS			10
+#define CSMA_CONF_MAX_NEIGHBOR_QUEUES			10
 
 #define NETSTACK_CONF_RADIO		xbee_radio_driver
 #define NETSTACK_CONF_NETWORK	rime_driver
@@ -35,7 +39,7 @@
 #define UIP_CONF_BYTE_ORDER      UIP_LITTLE_ENDIAN
 #define UIP_CONF_TCP      		  1
 #define UIP_CONF_TCP_SPLIT       1
-#define UIP_CONF_LOGGING         0
+#define UIP_CONF_LOGGING         1
 #define UIP_CONF_UDP_CHECKSUMS   1
 #define UIP_CONF_IP_FORWARD		  1
 #define UIP_CONF_REASSEMBLY		  1

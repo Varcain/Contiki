@@ -45,7 +45,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#define DEBUG 1
+#define DEBUG 0
 #if DEBUG
 #define DLEDS_ON(x) leds_on(x)
 #define DLEDS_OFF(x) leds_off(x)

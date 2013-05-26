@@ -12,8 +12,6 @@
 
 #include "lib/sensors.h"
 
-
-#include <stdio.h>
 #include <stddef.h>
 
 #include <dev/leds.h>
@@ -23,9 +21,7 @@
 
 #include "serial-line.h"
 
-#include <shell.h>
-
-#define DEBUG 1
+#define DEBUG 0
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -50,7 +46,7 @@ static uint8_t is_gateway;
 
 int __attribute__(( weak )) putchar(int c)
 {
-  //uart0_writeb(c);
+  uart0_writeb(c);
   return c;
 }
 
@@ -73,7 +69,7 @@ main(void)
     ROM_FPULazyStackingEnable();
 
     //
-    // Set the clocking to run directly from the crystal.
+    // Set the clocking to run at 80MHz
     //
     ROM_SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
                        SYSCTL_XTAL_16MHZ);
@@ -85,10 +81,10 @@ main(void)
 	clock_init();
 	process_init();
 
+	process_start(&sensors_process, NULL);
+
 	process_start(&etimer_process, NULL);
 	ctimer_init();
-
-	process_start(&sensors_process, NULL);
 
 	/* Networking stack. */
 	NETSTACK_RADIO.init();
@@ -132,12 +128,12 @@ main(void)
 void
 log_message(char *m1, char *m2)
 {
-	//printf("%s%s\n", m1, m2);
+	printf("%s%s\n", m1, m2);
 }
 /*---------------------------------------------------------------------------*/
 void
 uip_log(char *m)
 {
-	//printf("%s\n", m);
+	printf("%s\n", m);
 }
 /*---------------------------------------------------------------------------*/

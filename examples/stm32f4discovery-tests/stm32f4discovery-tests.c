@@ -48,10 +48,6 @@ static PT_THREAD(handle_connection(struct psock *p))
 	static char buf[100];
 	PSOCK_BEGIN(p);
 
-	etimer_set(&sendtimer, 3000);
-
-	PSOCK_WAIT_UNTIL(p, etimer_expired(&sendtimer));
-
 	snprintf(buf, sizeof(buf), "%02X:%02X		temperature: %d\n\r",
 			rimeaddr_node_addr.u8[0],
 			rimeaddr_node_addr.u8[1],
@@ -82,7 +78,7 @@ PROCESS_THREAD(sensor_psock_server_process, ev, data)
 
       while(!(uip_aborted() || uip_closed() || uip_timedout())) {
 
-        PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event || ev == PROCESS_EVENT_TIMER);
+        PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
         handle_connection(&ps);
       }
       PSOCK_CLOSE(&ps);
