@@ -7,7 +7,7 @@ CUSTOM_RULE_C_TO_CO=yes
 CUSTOM_RULE_LINK=yes
 
 # location of Tivaware/Stellarisware installation
-SWARE = /media/data/magisterka/Tivaware
+SWARE = /media/data/uc/Tivaware
 ###################################################
 # Set toolchain
 TC = /home/limak/x-tools/arm-cortex_m4-eabi/bin/arm-cortex_m4-eabi
